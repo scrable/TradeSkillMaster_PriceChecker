@@ -3,7 +3,7 @@
 ## Notes: Replies to price checks based off of TSM prices
 ## Author: seraph1m
 ## Version: v1.0.6
-## RequiredDeps: TradeSkillMaster_AuctionDB, TradeSkillMaster
+## RequiredDeps: TradeSkillMaster
 ## SavedVariables: TradeSkillMaster_PriceCheckerDB
 ## X-Curse-Packaged-Version: v1.0.5
 ## X-Curse-Project-Name: TradeSkillMaster_PriceChecker
