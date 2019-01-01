@@ -60,21 +60,21 @@ function Util:Process(message, recipient, channel)
 	if Util:LastRunCheck() == "Yes" then
 		local message = ""
 
-		if priceMarket ~= nil then
-			message = Util:ValuesFor(priceMarket, TSM.db.global["MarketText"], itemCount)
+		if priceMin ~= nil then
+			message = Util:ValuesFor(priceMin, TSM.db.global["MinText"], itemCount)
 		end
 
-		if priceMin ~= nil then
-			message = message .. Util:ValuesFor(priceMin, TSM.db.global["MinText"], itemCount)
+		if priceMarket ~= nil then
+			message = message .. Util:ValuesFor(priceMarket, TSM.db.global["MarketText"], itemCount)
 		end
 
 		if priceRegion ~= nil then
 			message = message .. Util:ValuesFor(priceRegion, TSM.db.global["RegionalText"], itemCount)
 		end
 
-		if TSM.db.global["ShowScanned"] then
+		--[[if TSM.db.global["ShowScanned"] then
 			message = message .."Scanned: "..TimeLastScannedMinutes.." Mins Ago"
-		end
+		end]]--
 
 		Util:SendMessage(message, recipient, channel)
 

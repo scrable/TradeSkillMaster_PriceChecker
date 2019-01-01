@@ -1,204 +1,196 @@
-local TSM = select(2, ...)
-local Options = TSM:NewModule("Options")
-local L = LibStub("AceLocale-3.0"):GetLocale("TradeSkillMaster_PriceChecker") -- loads the localization table
-local Util = TSM:GetModule("Util")
+--local L = LibStub("AceLocale-3.0"):GetLocale("TradeSkillMaster_PriceChecker") -- loads the localization table
 local AceGUI = LibStub("AceGUI-3.0") -- load the AceGUI libraries
-local private = {}
+TSMPC = LibStub("AceAddon-3.0"):NewAddon("TradeSkillMaster_PriceChecker", "AceConsole-3.0")
 
--- ============================================================================
--- Dropdown Types
--- ============================================================================
-local ReplyChannelSayDropDownBox = {["None"]=L["None"],["WHISPER"]=L["Whisper"],["SAY"]=L["Say"]}
-local ReplyChannelGuildDropDownBox = {["None"]=L["None"],["WHISPER"]=L["Whisper"],["GUILD"]=L["Guild"]}
-local ReplyChannelOfficerDropDownBox = {["None"]=L["None"],["WHISPER"]=L["Whisper"],["OFFICER"]=L["Officer"]}
-local ReplyChannelPartyDropDownBox = {["None"]=L["None"],["WHISPER"]=L["Whisper"],["PARTY"]=L["Party"]}
-
--- ============================================================================
--- Module Options
--- ============================================================================
-function Options:Load(container)
-	local tg = AceGUI:Create("TSMTabGroup")
-	tg:SetLayout("Fill")
-	tg:SetFullHeight(true)
-	tg:SetFullWidth(true)
-	tg:SetTabs({{value=1, text=L["General"]}})
-	tg:SetCallback("OnGroupSelected", function(self, _, value)
-		self:ReleaseChildren()
-		private:DrawGeneralSettings(self)
-	end)
-	container:AddChild(tg)
-	tg:SelectTab(1)
+function TSMPC:OnInitialize()
+    self.db = LibStub("AceDB-3.0"):New("TradeSkillMaster_PriceCheckerDB")
 end
 
-function private:DrawGeneralSettings(container)
-	local page = {
-		{
-		 type = "ScrollFrame",
-		 layout = "list",
-		 children = {
-			{
-				type = "InlineGroup",
-				layout = "flow",
-				title = L["TSM Source Options"],
-				children = {
-					{
-					type = "EditBox",
-					value = TSM.db.global["MarketSource"],
-					settingInfo = { TSM.db.global, "MarketSource" },
-					label = L["Market Source"],
-					tooltip = L["The TSM source used for market prices.  Leave blank to disable including in reply."],
-					},
-					{
-					type = "EditBox",
-					value = TSM.db.global["MinBuyoutSource"],
-					settingInfo = { TSM.db.global, "MinBuyoutSource" },
-					label = L["Min Buyout Source"],
-					tooltip = L["The TSM source used for min buyout prices.  Leave blank to disable including in reply."],
-					},
-					{
-					type = "EditBox",
-					value = TSM.db.global["Region"],
-					settingInfo = { TSM.db.global, "Region" },
-					label = L["Regional Source"],
-					tooltip = L["The TSM source used for regional prices (optional).  Leave blank to disable including in reply."],
-					},
+function TSMPC:SetTrigger(info, input)
+    self.db.global.Trigger = input
+		print("Set trigger to ", input)
+end
+
+function TSMPC:SetEnableAddon(info, input)
+		self.db.global.AddonEnabled = true
+		print("TradeSkillMaster_PriceChecker is now enabled")
+end
+
+function TSMPC:GetAddonEnabled(info)
+		return self.db.global.AddonEnabled
+end
+
+function TSMPC:SetDisableAddon(info, input)
+		self.db.global.AddonEnabled = false
+		print("TradeSkillMaster_PriceChecker is now disabled")
+end
+
+function TSMPC:SetRaidIcon(info, input)
+		if TSMPC:GetRaidIcon(info) == false then
+			print("Raid icon will now be used")
+			self.db.global.UseRaidIcon = true
+		else print("Raid icon is now disabled")
+			self.db.global.UseRaidIcon = false
+		end
+end
+
+function TSMPC:GetRaidIcon(info)
+		return self.db.global.UseRaidIcon
+end
+
+function TSMPC:GetShowCopper(info)
+		return self.db.global.ShowCopper
+end
+
+function TSMPC:SetShowCopper(info)
+	if TSMPC:GetShowCopper(info) == false then
+		print("Copper will now be shown")
+		self.db.global.ShowCopper = true
+	else print("Copper will now be hidden")
+		self.db.global.ShowCopper = false
+	end
+end
+
+function TSMPC:GetShowBrackets(info)
+		return self.db.global.ShowBrackets
+end
+
+function TSMPC:SetShowBrackets(info)
+	if TSMPC:GetShowBrackets(info) == false then
+		print("Brackets will now be shown")
+		self.db.global.ShowBrackets = true
+	else print("Brackets will now be hidden")
+		self.db.global.ShowBrackets = false
+	end
+end
+
+--[[
+-function TSMPC:GetShowScanned(info)
+		return self.db.global.ShowScanned
+end
+
+function TSMPC:SetShowScanned(info)
+	if TSMPC:GetShowScanned(info) == false then
+		print("Time since last scan will now be shown")
+		self.db.global.ShowScanned = true
+	else print("Time since last scan will now be hidden")
+		self.db.global.ShowScanned = false
+	end
+end
+]]--
+
+function TSMPC:SetGuildChannel(info, input)
+	input = strupper(input)
+	if (input == 'GUILD' or input == 'OFFICER' or input == 'WHISPER' or input == 'PARTY') then
+    self.db.global.GuildChannel = input
+		print("Set reply for guild messages to ", input)
+	else
+		print("Incorrect channel name. Guild message reply channel was not changed.")
+	end
+end
+
+function TSMPC:SetPartyChannel(info, input)
+	input = strupper(input)
+	if (input == 'GUILD' or input == 'OFFICER' or input == 'WHISPER' or input == 'PARTY') then
+    self.db.global.PartyChannel = input
+		print("Set reply for Party messages to ", input)
+	else
+		print("Incorrect channel name. Party message reply channel was not changed.")
+	end
+end
+
+function TSMPC:SetOfficerChannel(info, input)
+	input = strupper(input)
+	if (input == 'GUILD' or input == 'OFFICER' or input == 'WHISPER' or input == 'PARTY') then
+    self.db.global.OfficerChannel = input
+		print("Set reply for Officer messages to ", input)
+	else
+		print("Incorrect channel name. Officer message reply channel was not changed.")
+	end
+end
+
+local options = {
+    name = "MyAddon",
+    handler = TSMPC,
+    type = 'group',
+    args = {
+			--trigger
+        trigger = {
+            type = 'input',
+            name = 'Trigger',
+            desc = '/tsmpc trigger triggerkey',
+            set = 'SetTrigger',
+        },
+				--AddonEnabled
+				enable = {
+						type = 'toggle',
+						name = 'Enable Addon',
+						desc = '/tsmpc enable',
+						set = 'SetEnableAddon',
+						get = 'GetAddonEnabled',
 				},
-			},
-			{
-				type = "InlineGroup",
-				layout = "flow",
-				title = L["Price Check Options"],
-				children = {
-					{
-					type = "EditBox",
-					value = TSM.db.global["MarketText"],
-					settingInfo = { TSM.db.global, "MarketText" },
-					label = L["Market Text"],
-					tooltip = L["The text used for market price"],
-					},
-					{
-					type = "EditBox",
-					value = TSM.db.global["MinText"],
-					settingInfo = { TSM.db.global, "MinText" },
-					label = L["Min Buyout Text"],
-					tooltip = L["The text used for min buyout price"],
-					},
-					{
-					type = "EditBox",
-					value = TSM.db.global["RegionalText"],
-					settingInfo = { TSM.db.global, "RegionalText" },
-					label = L["Regional Text"],
-					tooltip = L["The text used for regional market price"],
-					},
-					{
-					type = "EditBox",
-					value = TSM.db.global["Trigger"],
-					settingInfo = { TSM.db.global, "Trigger" },
-					label = L["Trigger"],
-					tooltip = L["The trigger used at the start of a sentence for asking the price"],
-					},
-					{
-					type = "EditBox",
-					value = TSM.db.global["LockOutTime"],
-					label = L["Lockout Time"],
-					tooltip = L["Lockout time in seconds before another command can be processed"],
-					callback = function(_,_,value)
-						local value = tonumber(value)
-						if type(value)=='number' then
-							LockOutTime = value;
-							TSM.db.global["LockOutTime"] = LockOutTime;
-						end
-					end,
-					},
-					{
-					type = "CheckBox",
-					value = TSM.db.global["ShowCopper"],
-					settingInfo = { TSM.db.global, "ShowCopper" },
-					label = L["Show Copper Value"],
-					tooltip = L["Shows or hides the copper values in the reply."],
-					},
-					{
-					type = "CheckBox",
-					value = TSM.db.global["ShowBrackets"],
-					settingInfo = { TSM.db.global, "ShowBrackets" },
-					label = L["Show Brackets"],
-					tooltip = L["Shows or hides the brackets around the values in the reply."],
-					},
-					{
-					type = "CheckBox",
-					value = TSM.db.global["ShowScanned"],
-					settingInfo = { TSM.db.global, "ShowScanned" },
-					label = L["Show Last Scanned"],
-					tooltip = L["Shows or hides the last scanned time in the reply."],
-					},
+				--AddonDisabled
+				disable = {
+						type = 'toggle',
+						name = 'Disable Addon',
+						desc = '/tsmpc disable',
+						set = 'SetDisableAddon',
+						get = 'GetAddonEnabled',
 				},
-			},
-			{
-				type = "InlineGroup",
-				layout = "flow",
-				title = L["Reply Options For Channels"],
-				children = {
-					{
-					type = "Dropdown",
-					multiselect = false,
-					list = ReplyChannelSayDropDownBox,
-					value = TSM.db.global["Channel"],
-					settingInfo = { TSM.db.global, "Channel" },
-					label = L["Select channel to reply via for say price requests:"],
-					tooltip = L["Select a reply method"],
-					},
-					{
-					type = "Dropdown",
-					multiselect = false,
-					list = ReplyChannelGuildDropDownBox,
-					value = TSM.db.global["GuildChannel"],
-					settingInfo = { TSM.db.global, "GuildChannel" },
-					label = L["Select channel to reply via for guild price requests:"],
-					tooltip = L["Select a reply method"],
-					},
-					{
-					type = "Dropdown",
-					multiselect = false,
-					list = ReplyChannelOfficerDropDownBox,
-					value = TSM.db.global["OfficerChannel"],
-					settingInfo = { TSM.db.global, "OfficerChannel" },
-					label = L["Select channel to reply via for officer price requests:"],
-					tooltip = L["Select a reply method"],
-					},
-					{
-					type = "Dropdown",
-					multiselect = false,
-					list = ReplyChannelPartyDropDownBox,
-					value = TSM.db.global["PartyChannel"],
-					settingInfo = { TSM.db.global, "PartyChannel" },
-					label = L["Select channel to reply via for party price requests:"],
-					tooltip = L["Select a reply method"],
-					},
+				--UseRaidIcon
+				useraidicon = {
+						type = 'toggle',
+						name = 'Use Raid Icon',
+						desc = '/tsmpc useraidicon',
+						set = 'SetRaidIcon',
+						get = 'GetRaidIcon',
 				},
-			},
-			{
-				type = "InlineGroup",
-				layout = "flow",
-				title = L["Addon Options"],
-				children = {
-					{
-					type = "CheckBox",
-					value = TSM.db.global["AddonEnabled"],
-					settingInfo = { TSM.db.global, "AddonEnabled" },
-					label = L["Enable/Disable Addon"],
-					tooltip = L["Enable/Disable the addon"],
-					},
-					{
-					type = "CheckBox",
-					value = TSM.db.global["UseRaidIcon"],
-					settingInfo = { TSM.db.global, "UseRaidIcon" },
-					label = L["Use Raid Icon {rt2}"],
-					tooltip = L["Enable use of the circle icon to make prices easier to see."],
-					},
+				--ShowCopper
+				showcopper = {
+						type = 'toggle',
+						name = 'Show Copper on prices',
+						desc = '/tsmpc showcopper',
+						set = 'SetShowCopper',
+						get = 'GetShowCopper',
 				},
-			},
-		},
-	}
+				--ShowBrackets
+				showbrackets = {
+						type = 'toggle',
+						name = 'Show brackets around prices',
+						desc = '/tsmpc showbrackets',
+						set = 'SetShowBrackets',
+						get = 'GetShowBrackets'
+				},
+				--[[--ShowScanned
+				showscanned = {
+						type = 'toggle',
+						name = 'Show when last scanned',
+						desc = '/tsmpc showscanned',
+						set = 'SetShowScanned',
+						get = 'GetShowScanned'
+				},]]--
+				--GuildChannel
+				guildchannel = {
+						type = 'input',
+						name = 'Channel to reply for guild messages',
+						desc = '/tsmpc guild CHANNEL',
+						set = 'SetGuildChannel',
+				},
+				--PartyChannel
+				partychannel = {
+						type = 'input',
+						name = 'Channel to reply for party messages',
+						desc = '/tsmpc party CHANNEL',
+						set = 'SetPartyChannel',
+				},
+				--OfficerChannel
+				officerchannel = {
+						type = 'input',
+						name = 'Channel to reply for officer messages',
+						desc = '/tsmpc officer CHANNEL',
+						set = 'SetOfficerChannel',
+				},
+    },
 }
-	TSMAPI.GUI:BuildOptions(container, page)
-end
+
+LibStub("AceConfig-3.0"):RegisterOptionsTable("TradeSkillMaster_PriceChecker", options, {"tsmpc"})

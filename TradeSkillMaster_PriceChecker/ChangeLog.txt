@@ -1,3 +1,4 @@
+V1.07 Vague support for TSM 4.0 (Now requires TSM Desktop Application)
 V1.06 Bug fix for DBMarket
 V1.05 Added customized price sources, thousands separator and ability to supress las scanned message.
 V1.04 Updated for 7.3
