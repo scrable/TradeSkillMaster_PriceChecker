@@ -59,38 +59,38 @@ function Util:ValuesFor(marketPrice, marketName, itemCount)
 	local rightBracket = "]"
 	local gold = "."
 	local copper = ""
-	
+
 	if TSM.db.global["UseRaidIcon"] then
 		icon = "g{rt2}"
 	end
-	
+
 	if not TSM.db.global["ShowBrackets"] then
 		leftBracket = ""
 		rightBracket = ""
 	end
-	
+
 	if TSM.db.global["ShowCopper"] then
 		if itemCount > 1 then
 			copper = "s"..multipliedMarketCopper
 		else
 			copper = "s"..marketCopper
 		end
-		
+
 		gold = "g"
-	
+
 		if TSM.db.global["UseRaidIcon"] then
 			icon = "c{rt2}"
 		else
 			icon = "c"
 		end
 	end
-	
+
 	if itemCount > 1 then
 		message = marketName.." x"..itemCount.." "..leftBracket..Util:FormatThousand(multipliedMarketGold)..gold..multipliedMarketSilver..copper..icon..rightBracket.." "
 	else
 		message = marketName.." "..leftBracket..Util:FormatThousand(marketGold)..gold..marketSilver..copper..icon..rightBracket.." "
 	end
-	
+
 	return message
 end
 

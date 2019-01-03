@@ -34,13 +34,13 @@ function Util:Process(message, recipient, channel)
 	local priceRegion = TSM_API.GetCustomPriceValue(TSM.db.global["Region"], itemID)
 
 	if priceMarket == nill then
-		priceMarket = TSM_API.GetItemValue(itemID, TSM.db.global["MarketSource"])
+		priceMarket = TSM_API.GetCustomPriceValue(TSM.db.global["MarketSource"], itemID)
 	end
 	if priceMin == nill then
-		priceMin = TSM_API.GetItemValue(itemID, TSM.db.global["MinBuyoutSource"])
+		priceMin = TSM_API.GetCustomPriceValue(TSM.db.global["MinBuyoutSource"], itemID)
 	end
 	if priceRegion == nill then
-		priceRegion = TSM_API.GetItemValue(itemID, TSM.db.global["Region"])
+		priceRegion = TSM_API.GetCustomPriceValue(TSM.db.global["Region"], itemID)
 	end
 
 	if itemID == nill then
@@ -75,7 +75,6 @@ function Util:Process(message, recipient, channel)
 		--[[if TSM.db.global["ShowScanned"] then
 			message = message .."Scanned: "..TimeLastScannedMinutes.." Mins Ago"
 		end]]--
-
 		Util:SendMessage(message, recipient, channel)
 
 		TSM.LastRunDelayTime = time() --- gets the current time
