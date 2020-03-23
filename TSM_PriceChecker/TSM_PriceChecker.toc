@@ -1,0 +1,25 @@
+## Interface: 80100
+## Title: |cff00ff00TSM_PriceChecker|r
+## Notes: Replies to price checks based off of TSM prices
+## Author: seraph1m
+## Version: v1.0.7
+## RequiredDeps: TradeSkillMaster
+## SavedVariables: TSM_PriceCheckerDB
+
+Libs\LibStub\LibStub.lua
+
+Locale\enUS.lua
+Locale\deDE.lua
+Locale\esES.lua
+Locale\esMX.lua
+Locale\frFR.lua
+Locale\koKR.lua
+Locale\ruRU.lua
+Locale\zhCN.lua
+Locale\zhTW.lua
+Locale\ptBR.lua
+
+TSM_PriceChecker.lua
+Modules\Util.lua
+Modules\Options.lua
+Modules\EventDetection.lua

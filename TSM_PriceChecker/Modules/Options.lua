@@ -1,9 +1,9 @@
 --local L = LibStub("AceLocale-3.0"):GetLocale("TradeSkillMaster_PriceChecker") -- loads the localization table
 local AceGUI = LibStub("AceGUI-3.0") -- load the AceGUI libraries
-TSMPC = LibStub("AceAddon-3.0"):NewAddon("TradeSkillMaster_PriceChecker", "AceConsole-3.0")
+TSMPC = LibStub("AceAddon-3.0"):NewAddon("TSM1_PriceChecker", "AceConsole-3.0")
 
 function TSMPC:OnInitialize()
-    self.db = LibStub("AceDB-3.0"):New("TradeSkillMaster_PriceCheckerDB")
+    self.db = LibStub("AceDB-3.0"):New("TSM_PriceCheckerDB")
 end
 
 function TSMPC:SetTrigger(info, input)
@@ -13,7 +13,7 @@ end
 
 function TSMPC:SetEnableAddon(info, input)
 		self.db.global.AddonEnabled = true
-		print("TradeSkillMaster_PriceChecker is now enabled")
+		print("TSM_PriceChecker is now enabled")
 end
 
 function TSMPC:GetAddonEnabled(info)
@@ -22,7 +22,7 @@ end
 
 function TSMPC:SetDisableAddon(info, input)
 		self.db.global.AddonEnabled = false
-		print("TradeSkillMaster_PriceChecker is now disabled")
+		print("TSM_PriceChecker is now disabled")
 end
 
 function TSMPC:SetRaidIcon(info, input)
@@ -193,4 +193,4 @@ local options = {
     },
 }
 
-LibStub("AceConfig-3.0"):RegisterOptionsTable("TradeSkillMaster_PriceChecker", options, {"tsmpc"})
+LibStub("AceConfig-3.0"):RegisterOptionsTable("TSM_PriceChecker", options, {"tsmpc"})
