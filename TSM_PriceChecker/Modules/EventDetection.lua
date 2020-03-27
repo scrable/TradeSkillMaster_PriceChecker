@@ -25,8 +25,7 @@ function Util:Process(message, recipient, channel)
 		end
 	end
 
-	local itemID  = TSM_API.ToItemString(itemString)
-	local itemID  = TSM_API.ToItemString(itemString)
+	local itemID = TSM_API.ToItemString(itemString)
 	if itemID == nil then
 		Util:SendMessage("No such item {Skull} ", recipient, channel)
 		return
