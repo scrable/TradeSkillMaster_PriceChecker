@@ -25,7 +25,11 @@ function Util:Process(message, recipient, channel)
 		end
 	end
 
-	local itemID  = TSM_API.ToItemString(itemString)
+	local itemID = TSM_API.ToItemString(itemString)
+	if itemID == nil then
+		Util:SendMessage("No such item {Skull} ", recipient, channel)
+		return
+	end
 
 	local priceMarket = TSM_API.GetCustomPriceValue(TSM.db.global["MarketSource"], itemID)
 	local priceMin = TSM_API.GetCustomPriceValue(TSM.db.global["MinBuyoutSource"], itemID)
