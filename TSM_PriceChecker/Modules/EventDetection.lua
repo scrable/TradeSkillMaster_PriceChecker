@@ -26,15 +26,16 @@ function Util:Process(message, recipient, channel)
 	end
 	
 	local itemID = TSM_API.ToItemString(itemString)
-		if itemID == nil then
-			local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType,itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo("".. itemString .."")
-			if itemLink ~= nil then
-				itemID = TSM_API.ToItemString(itemLink)
-			else
-				Util:SendMessage("No such item {Skull} ", recipient, channel)
-				return
-			end
-		end
+  if itemID == nil then
+    local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType,itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo("".. itemString .."")
+    if itemLink ~= nil then
+      itemID = TSM_API.ToItemString(itemLink)
+    else
+      Util:SendMessage("No such item {Skull} ", recipient, channel)
+      return
+    end
+  end
+
 	local priceMarket = TSM_API.GetCustomPriceValue(TSM.db.global["MarketSource"], itemID)
 	local priceMin = TSM_API.GetCustomPriceValue(TSM.db.global["MinBuyoutSource"], itemID)
 	--Trying GetCustomPriceValue, though I'm not certain it's wise to allow modified prices here.
