@@ -71,17 +71,17 @@ function Util:ValuesFor(marketPrice, marketName, itemCount)
 
 	if TSM.db.global["ShowCopper"] then
 		if itemCount > 1 then
-			copper = "s"..multipliedMarketCopper
+			copper = "s "..multipliedMarketCopper
 		else
-			copper = "s"..marketCopper
+			copper = "s "..marketCopper
 		end
 
-		gold = "g"
+		gold = "g "
 
 		if TSM.db.global["UseRaidIcon"] then
-			icon = "c{rt2}"
+			icon = "c {rt2}"
 		else
-			icon = "c"
+			icon = "c "
 		end
 	end
 
