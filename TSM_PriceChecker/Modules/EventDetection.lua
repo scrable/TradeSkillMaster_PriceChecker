@@ -52,13 +52,6 @@ function Util:Process(message, recipient, channel)
 		priceRegion = TSM_API.GetCustomPriceValue(TSM.db.global["Region"], itemID)
 	end
 
-	-- if itemID == nill then
-	-- end
-
-	if itemID == nill then
-		return
-	end
-
 	-----------------------------------------------------------------
 
 	if priceMarket == nil and priceMin == nil and priceRegion == null then
