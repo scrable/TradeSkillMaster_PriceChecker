@@ -173,21 +173,21 @@ local options = {
 				guildchannel = {
 						type = 'input',
 						name = 'Channel to reply for guild messages',
-						desc = '/tsmpc guild CHANNEL',
+						desc = '/tsmpc guildchannel CHANNEL',
 						set = 'SetGuildChannel',
 				},
 				--PartyChannel
 				partychannel = {
 						type = 'input',
 						name = 'Channel to reply for party messages',
-						desc = '/tsmpc party CHANNEL',
+						desc = '/tsmpc partychannel CHANNEL',
 						set = 'SetPartyChannel',
 				},
 				--OfficerChannel
 				officerchannel = {
 						type = 'input',
 						name = 'Channel to reply for officer messages',
-						desc = '/tsmpc officer CHANNEL',
+						desc = '/tsmpc officerchannel CHANNEL',
 						set = 'SetOfficerChannel',
 				},
     },
