@@ -8,8 +8,9 @@ function Util:ConvertPriceToMoney(price, currency)
 		amount = floor(price/10000) -- divide price by 10000 to decide gold and floor it to get rid of hang overs
 		return amount or 0 -- Make sure it always returns a number
 	elseif currency == "Silver" then
-		amount = floor(strsub(price, -4) / 100) -- strsub will only see the last 4 numbers of a sentece and divide it by 100
-		return amount or 0
+		amount = floor(strsub(price, -4)/100) -- strsub will only see the last 4 numbers of a sentece and divide it by 100
+		if string.len(amount) < 2  then amount = "0"..floor(strsub(price, -4)/100) end
+		return amount
 	elseif currency == "Copper" then
 		amount = floor(strsub(price, -2)) -- no division needed for 10th's
 		return amount or 0
