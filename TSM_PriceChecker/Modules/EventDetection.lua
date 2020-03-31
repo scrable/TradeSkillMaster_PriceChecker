@@ -24,17 +24,21 @@ function Util:Process(message, recipient, channel)
 			itemCount = 1
 		end
 	end
-
+	
 	local itemID = TSM_API.ToItemString(itemString)
-  	if itemID == nil then
-		local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType,itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo("".. itemString .."")
-		if itemLink ~= nil then
-			itemID = TSM_API.ToItemString(itemLink)
-    	else
-			Util:SendMessage("No such item {Skull} ", recipient, channel)
-		return
+		if itemID == nil then
+			local substr = string.sub(itemString, 2, string.len( itemString )-1)
+			local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType,itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo("".. substr .."")
+
+			if itemLink ~= nil then
+				itemID = TSM_API.ToItemString(itemLink)
+			else
+				if string.sub(itemString, 1, 1) == "[" and string.sub(itemString, string.len(itemString), string.len(itemString)) == "]" then
+					Util:SendMessage("No such item {Skull} ", recipient, channel)
+				end
+			return
+			end
 		end
-	end
 
 	local priceMarket = TSM_API.GetCustomPriceValue(TSM.db.global["MarketSource"], itemID)
 	local priceMin = TSM_API.GetCustomPriceValue(TSM.db.global["MinBuyoutSource"], itemID)
